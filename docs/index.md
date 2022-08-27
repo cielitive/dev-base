@@ -1,4 +1,4 @@
-## **Shortcut**
+## *Shortcut*
 
 ### 1. Bash
 
@@ -8,21 +8,21 @@
 - `ctrl + e(end)` カーソルを行の最後へ移動
 <br />
 
-- ctrl + d(delete): 直後の一文字を削除(=delete)
-- ctrl + h(): 直前の一文字を削除(=backspace)
+- `ctrl + d(delete)` 直後の一文字を削除(=delete)
+- `ctrl + h()` 直前の一文字を削除(=backspace)
 <br />
 
-- ctrl + r(reverse-i-search): 過去のコマンド履歴を検索
-- ctrl + p(previous): ひとつ前のコマンド履歴を表示
-- ctrl + n(next): ひとつ後のコマンド履歴を表示
+- `ctrl + r(reverse-i-search)` 過去のコマンド履歴を検索
+- `ctrl + p(previous)` ひとつ前のコマンド履歴を表示
+- `ctrl + n(next)` ひとつ後のコマンド履歴を表示
 <br />
 
-- ctrl + u(): カーソルより前の文字列を全て削除
-- ctrl + k(): カーソルより後の文字列を全て削除
+- `ctrl + u()` カーソルより前の文字列を全て削除
+- `ctrl + k()` カーソルより後の文字列を全て削除
 
 ## *Linux Tips and Tricks*
 
-#### 1. IPアドレスから地域を特定する
+### 1. IPアドレスから地域を特定する
 
 ```bash
 $ ip="142.250.185.164"
@@ -72,7 +72,7 @@ $ python -m http.server 8000
 
 ## *Shell Script Tips and Tricks*
 
-##### 1. エラーハンドリング
+### 1. エラーハンドリング
 
 ```bash
 set -eu -o pipefail
@@ -100,7 +100,7 @@ $ command > /dev/null 2>&1
 $ command 1> /dev/null 2> /dev/null
 ```
 
-#### 2. 変数
+### 2. 変数
 
 ```bash
 ### デフォルト値
@@ -160,7 +160,7 @@ $ echo ${HOGE%%.*}
 hoge
 ```
 
-#### 3. 繰り返し処理
+### 3. 繰り返し処理
 
 ```bash
 ### -r: バックスラッシュ(\)によるクォートを抑止する
@@ -170,7 +170,7 @@ do
 done
 ```
 
-#### 4. ファイル検索・操作
+### 4. ファイル検索・操作
 
 ```bash
 ### "uid"と"gid"を指定したファイル検索
@@ -180,7 +180,7 @@ $ find . \( -uid <uid> -o -gid <gid> \)
 $ find <path> -user <uid> -exec chown ${user}:${group} {} \;
 ```
 
-#### 5. awk
+### 5. awk
 
 ```bash
 ### 置換
@@ -210,7 +210,7 @@ $ cat /etc/shells | awk 'NR>3{print $0}'
 /usr/bin/bash
 ```
 
-#### 6. sed
+### 6. sed
 
 ```bash
 ### 特定の行（２行目）に追加する
@@ -249,11 +249,3 @@ EOT
 /root/.go/bin
 /usr/bin/bash
 ```
-
-## *Linux Performance Checklist*
-
-[> システムのパフォーマンス分析方法](https://esa-pages.io/p/sharing/14387/posts/20/dfb77c259d31542e4177.html "")
-
-## *Git Tips and Tricks*
-
-[> Gitの使い方](https://esa-pages.io/p/sharing/14387/posts/6/95c231dd3af023267589.html "")
