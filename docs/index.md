@@ -1,4 +1,4 @@
-## *Shortcut*
+## **Shortcut**
 
 ### 1. Bash
 
@@ -20,7 +20,7 @@
 - `ctrl + u()` カーソルより前の文字列を全て削除
 - `ctrl + k()` カーソルより後の文字列を全て削除
 
-## *Linux Tips and Tricks*
+## **Linux Tips and Tricks**
 
 ### 1. IPアドレスから地域を特定する
 
@@ -70,7 +70,7 @@ $ python -m SimpleHTTPServer 8000
 $ python -m http.server 8000
 ```
 
-## *Shell Script Tips and Tricks*
+## **Shell Script Tips and Tricks**
 
 ### 1. エラーハンドリング
 
