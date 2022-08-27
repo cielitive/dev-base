@@ -2,11 +2,11 @@
 
 ### 1. Bash
 
-- ctrl + f(forward): カーソルを右側へ移動
+- *ctrl + f(forward):* カーソルを右側へ移動
 - ctrl + b(backward): カーソルを左側へ移動
 - ctrl + a(ahead): カーソルを行の先頭へ移動
 - ctrl + e(end): カーソルを行の最後へ移動
-
+  
 - ctrl + d(delete): 直後の一文字を削除(=delete)
 - ctrl + h(): 直前の一文字を削除(=backspace)
 
