@@ -1,243 +1,357 @@
-## **Shortcut**
+## *- cheat sheet -*
 
-### 1. Bash
+### パターンスペースを表示する
 
-- `ctrl + f(forward)` カーソルを右側へ移動
-- `ctrl + b(backward)` カーソルを左側へ移動
-- `ctrl + a(ahead)` カーソルを行の先頭へ移動
-- `ctrl + e(end)` カーソルを行の最後へ移動
-<br />
-
-- `ctrl + d(delete)` 直後の一文字を削除(=delete)
-- `ctrl + h()` 直前の一文字を削除(=backspace)
-<br />
-
-- `ctrl + r(reverse-i-search)` 過去のコマンド履歴を検索
-- `ctrl + p(previous)` ひとつ前のコマンド履歴を表示
-- `ctrl + n(next)` ひとつ後のコマンド履歴を表示
-<br />
-
-- `ctrl + u()` カーソルより前の文字列を全て削除
-- `ctrl + k()` カーソルより後の文字列を全て削除
-
-## **Linux Tips and Tricks**
-
-### 1. IPアドレスから地域を特定する
+#### 1. 行番号で表示範囲を指定し表示する
 
 ```bash
-$ ip="142.250.185.164"
-$ curl -s ipinfo.io/${ip} | jq
-{
-  "ip": "142.250.185.164",
-  "hostname": "fra16s51-in-f4.1e100.net",
-  "city": "Mountain View",
-  "region": "California",
-  "country": "US",
-  "loc": "38.0088,-122.1175",
-  "org": "AS15169 Google LLC",
-  "postal": "94043",
-  "timezone": "America/Los_Angeles",
-  "readme": "https://ipinfo.io/missingauth"
-}
+$ sed -n '1p' source.txt 
+# aaa
 
-$ curl -s ip-api.com/json/${ip} | jq
-{
-  "status": "success",
-  "country": "Germany",
-  "countryCode": "DE",
-  "region": "HE",
-  "regionName": "Hesse",
-  "city": "Frankfurt am Main",
-  "zip": "60313",
-  "lat": 50.1109,
-  "lon": 8.68213,
-  "timezone": "Europe/Berlin",
-  "isp": "Google LLC",
-  "org": "Google LLC",
-  "as": "AS15169 Google LLC",
-  "query": "142.250.185.164"
-}
-```
----
- 
-### 2. 特定のポートをリッスンする
-
-```bash
-### 2.7
-$ python -m SimpleHTTPServer 8000
-
-### 3.x
-$ python -m http.server 8000
-```
-
-## **Shell Script Tips and Tricks**
-
-### 1. エラーハンドリング
-
-```bash
-set -eu -o pipefail
-IFS=$'\n\t'
-
-### "||"を使う場合
-set +e
-command1 || command2
-set -e
+$ sed -n '1,2p' source.txt 
+# aaa
+aaa01,aaa02,aaa03
 ```
 
 ```bash
-### 標準出力
-echo "stdout" >&1
-### 標準エラー出力
-echo "stderr" >&2
+### テストデータ
+$ cat source.txt
+# aaa
+aaa01,aaa02,aaa03
 
-### 標準エラー出力のみファイルにリダイレクト
-$ command 2> file
+# bbb
+bbb01,bbb02,bbb03
 
-### 標準出力 & 標準エラー出力を出力しない
-$ command >& /dev/null
-$ command &> /dev/null
-$ command > /dev/null 2>&1
-$ command 1> /dev/null 2> /dev/null
+# ccc
+ccc01,ccc02,ccc03
 ```
 
-### 2. 変数
+#### 2. 特定の文字列を含む行を表示する
 
 ```bash
-### デフォルト値
-###
-$ echo ${HOGE:-HELLO}
+$ sed -n '/aaa/p' source.txt 
+# aaa
+aaa01,aaa02,aaa03
 
-###
-$ echo ${HOGE:+HELLO}
-
-### 置換
-$ HOGE=abcdabcd
-$ echo ${HOGE}
-abcdabcd
-
-### 最初のマッチのみ置換
-$ echo ${HOGE/bc/xx}
-axxdabcd
-
-### 全てのマッチを置換
-$ echo ${HOGE//bc/xx}
-axxdaxxd
-
-### 大文字に変換
-$ HOGE=abcdABCD
-$ echo ${HOGE^^}
-ABCDABCD
-
-### 小文字に変換
-$ echo ${HOGE,,}
-abcdabcd
-
-### 変数のパターン一致による除外
-### 前から検索
-$ HOGE=/home/user/hoge
-$ echo ${HOGE}
-/home/user/hoge
-
-### 最短除外
-$ echo ${HOGE#*/}
-home/user/hoge
-
-#### 最長除外
-$ echo ${HOGE##*/}
-hoge
-
-### 後ろから検索
-$ HOGE=hoge.tar.bz2
-$ echo ${HOGE}
-hoge.tar.bz2
-
-### 最短除外
-$ echo ${HOGE%.*}
-hoge.tar
-
-### 最長除外
-$ echo ${HOGE%%.*}
-hoge
+$ grep 'aaa' source.txt 
+# aaa
+aaa01,aaa02,aaa03
 ```
 
-### 3. 繰り返し処理
-
 ```bash
-### -r: バックスラッシュ(\)によるクォートを抑止する
-$ cat text.file | while IFS=":" read -r x y z
-do
-  echo "x: ${x}, y: ${y}, z: ${z}"
-done
+### 検索文字列を含む行+n行表示する場合
+$ sed '/aaa/,+1p' source.txt
+
+$ grep -A1 'aaa' source.txt
 ```
 
-### 4. ファイル検索・操作
+#### 3. 開始文字列から終了文字列までの行を表示する
 
 ```bash
-### "uid"と"gid"を指定したファイル検索
-$ find . \( -uid <uid> -o -gid <gid> \)
+### 開始文字列が含まれる最初の行から、終了文字列が含まれる最初の行まで
+$ sed -n '/aaa/,/bbb/p' source.txt 
+# aaa
+aaa01,aaa02,aaa03
 
-### 検索したファイルの所有者とグループを変更する
-$ find <path> -user <uid> -exec chown ${user}:${group} {} \;
+# bbb
 ```
 
-### 5. awk
+#### 4. 処理対象行の行番号を表示する
 
 ```bash
-### 置換
-$ cat /etc/shells 
-/bin/sh
-/bin/bash
-/usr/bin/sh
-/usr/bin/bash
-
-### 最初のマッチのみ置換
-$ cat /etc/shells | awk -F"/" /usr/'{sub("s", "S"); print}'
-/uSr/bin/sh
-/uSr/bin/bash
-
-### すべてのマッチを置換
-$ cat /etc/shells | awk -F"/" /usr/'{gsub("s", "S"); print}'
-/uSr/bin/Sh
-/uSr/bin/baSh
-
-### 特定の文字を切り出す
-$ cat /etc/shells | awk -F"/" /usr/'{str=substr($0, index($0, "bin"), 3); print str}'
-bin
-bin
-
-### 特定の行以降を表示
-$ cat /etc/shells | awk 'NR>3{print $0}'
-/usr/bin/bash
+$ sed -n '/aaa/=' source.txt 
+1
+2
 ```
 
-### 6. sed
+### パターンスペースを削除する
+
+#### 1. 行番号で削除範囲を指定する
 
 ```bash
-### 特定の行（２行目）に追加する
-$ cat /etc/shells | sed -e '2i /usr/local/bin'
+### 1行目を削除
+$ sed '1d' source.txt
+aaa01,aaa02,aaa03
+
+# bbb
+bbb01,bbb02,bbb03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+```bash
+### 4~6行目を削除
+$ sed '4,6d' source.txt
+# aaa
+aaa01,aaa02,aaa03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+#### 2. 最終行を削除する
+
+```bash
+$ sed '$d' source.txt 
+# aaa
+aaa01,aaa02,aaa03
+
+# bbb
+bbb01,bbb02,bbb03
+
+# ccc
+```
+
+#### 3. 特定の文字列を含む行を削除する
+
+```bash
+### "aaa"を含む行を削除
+### -e: コマンドに追加するコマンド(=置換条件など), 省略可能
+$ sed '/aaa/d' source.txt
+
+# bbb
+bbb01,bbb02,bbb03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+```bash
+### "#"で始まるコメント行を削除
+$ sed '/^#/d' source.txt
+aaa01,aaa02,aaa03
+
+bbb01,bbb02,bbb03
+
+ccc01,ccc02,ccc03
+```
+
+```bash
+### 空行を削除する
+$ sed '/^$/d' source.txt 
+# aaa
+aaa01,aaa02,aaa03
+# bbb
+bbb01,bbb02,bbb03
+# ccc
+ccc01,ccc02,ccc03
+```
+
+```bash
+### コメント行と空行を削除する
+### -E: 拡張正規表現
+$ sed -E '/(^$|^#)/d' source.txt
+aaa01,aaa02,aaa03
+bbb01,bbb02,bbb03
+ccc01,ccc02,ccc03
+
+### 行頭にスペースがある場合
+$ sed -E '/^(#|[ \t]*#|$)/d' source.txt
+```
+
+### パターンスペースで条件に合った文字列を置換する
+
+#### 1. 特定の文字列を置換する
+
+```bash
+### "aaa"を"xxx"に置換
+### (s): 置換, (g): すべてを対象
+$ sed 's/aaa/xxx/g' source.txt 
+# xxx
+xxx01,xxx02,xxx03
+
+# bbb
+bbb01,bbb02,bbb03
+
+# ccc
+ccc01,ccc02,ccc03
+
+### (i): 大文字小文字をくべつしない
+$ sed 's/aaa/xxx/gi' source.txt
+
+### -n: 置換した行のみ表示
+sed -n 's/aaa/xxx/g' source.txt
+```
+
+```bash
+### 複数の対象文字列を置換
+ sed -E 's/01|02|03/04/g' source.txt
+# aaa
+aaa04,aaa04,aaa04
+
+# bbb
+bbb04,bbb04,bbb04
+
+# ccc
+ccc04,ccc04,ccc04
+```
+
+```bash
+### 複数回の置換
+$ sed -e 's/aaa/bbb/g' -e 's/bbb/xxx/g' source.txt
+or
+$ sed 's/aaa/bbb/g;s/bbb/xxx/g' source.txt 
+# xxx
+xxx01,xxx02,xxx03
+
+# xxx
+xxx01,xxx02,xxx03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+#### 2. n回目の置換対象文字列のみ置換する
+
+```bash
+### (行の)2回目の対象文字列を置換
+$ sed 's/aaa/xxx/2' source.txt
+# aaa
+aaa01,xxx02,aaa03
+
+# bbb
+bbb01,bbb02,bbb03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+#### 3. 特定の文字列を含む行のみを対象とし置換する
+
+```bash
+### "aaa"を含む行のみ"01"を"04"に置換
+$ sed '/aaa/s/01/04/g' source.txt 
+# aaa
+aaa04,aaa02,aaa03
+
+# bbb
+bbb01,bbb02,bbb03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+```bash
+### 特定の文字列を含まない行のみ置換
+$ sed '/aaa/!s/01/04/g' source.txt
+# aaa
+aaa01,aaa02,aaa03
+
+# bbb
+bbb04,bbb02,bbb03
+
+# ccc
+ccc04,ccc02,ccc03
+```
+
+#### 4. 置換対象の行(範囲)を行番号で指定して置換する
+
+```bash
+### 指定行の間で置換
+$ sed '4,6 s/bbb/zzz/g' source.txt 
+# aaa
+aaa01,aaa02,aaa03
+
+# zzz
+zzz01,zzz02,zzz03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+#### 5. 置換対象の行(範囲)を文字列で指定して置換する
+
+```bash
+### 指定した開始、終了行も置換対象
+$ sed '/# bbb/,/# ccc/ s/01/04/g' source.txt
+# aaa
+aaa01,aaa02,aaa03
+
+# bbb
+bbb04,bbb02,bbb03
+
+# ccc
+ccc01,ccc02,ccc03
+```
+
+#### 6. 対象文字列を大文字・小文字に置換する
+
+```bash
+### 大文字に置換
+$ sed -E 's/.+/\U\0/g' source.txt
+
+### 小文字に置換
+$ sed -E 's/.+/\L\0/g' source.txt
+```
+
+#### 7. 空行・空白(タブ、スペース)を置換する
+
+```bash
+### タブをスペースに変換
+$ sed -e 's/<tab>/<space>/g' source.txt
+```
+
+```bash
+### 複数のスペースを1つのスペースに変換
+$ sed -e 's/<space><space>*/<space>/g' source.txt
+
+### すべてのホワイトスペースを1つのスペースに変換
+$ sed -e 's/[<space><tab>][<space><tab>]*/<space>/g' source.txt
+```
+
+#### . キーと値を入れ替える
+
+```bash
+$ cat source.yml 
+key01: val01
+key02: val02
+key03: val03
+
+$ sed -E 's/^(.*): (.*)/\2: \1/g' source.yml 
+val01: key01
+val02: key02
+val03: key03
+```
+
+### テキスト(行)を追加する
+
+#### 1. 特定の行（２行目）に追加する
+
+```bash
+$ sed -e '2i /usr/local/bin' /etc/shells
 /bin/sh
 /usr/local/bin
 /bin/bash
 /usr/bin/sh
 /usr/bin/bash
+```
 
-### 特定の行（２行目の下）に追加する
-$ cat /etc/shells | sed -e '2a /usr/local/bin'
+#### 2. 特定の行（２行目の下）に追加する
+
+```bash
+$ sed -e '2a /usr/local/bin' /etc/shells
 /bin/sh
 /bin/bash
 /usr/local/bin
 /usr/bin/sh
 /usr/bin/bash
+```
 
-### 特定の行（"/usr/bin/sh"の下）に追加する
-$ cat /etc/shells | sed -e '/\/usr\/bin\/sh/a /usr/local/bin'
+#### 3. 特定の行（"/usr/bin/sh"の下）に追加する
+
+```bash
+$ sed -e '/\/usr\/bin\/sh/a /usr/local/bin' /etc/shells
 /bin/sh
 /bin/bash
 /usr/bin/sh
 /usr/local/bin
 /usr/bin/bash
+```
 
-### 特定の行（"/usr/bin/sh"の下）に複数行追加する
+#### 4. 特定の行（"/usr/bin/sh"の下）に複数行追加する
+
+```bash
 cat <<EOT | sed -e '/\/usr\/bin\/sh/r /dev/stdin' /etc/shells
 /usr/local/bin
 /root/.go/bin
@@ -248,4 +362,34 @@ EOT
 /usr/local/bin
 /root/.go/bin
 /usr/bin/bash
+```
+
+## *- tips -*
+
+#### 1. TOMLファイルのテーブル配下の値を表示する
+
+```bash
+$ table=aaa; cat source.toml | sed -n -E "/\[$table\]/,/^$|^\[/p" | sed '1d;$d'
+aaa01
+aaa02
+aaa03
+```
+
+```bash
+### テストデータ
+$ cat source.toml 
+[aaa]
+aaa01
+aaa02
+aaa03
+
+[bbb]
+bbb01
+bbb02
+bbb03
+
+[ccc]
+ccc01
+ccc02
+ccc03
 ```
